@@ -32,7 +32,6 @@ function Signup() {
           email: values.email,
           password: values.password,
         })
-        console.log(registerResponse)
         login(registerResponse)
       } catch (error) {
         bag.setErrors({ general: error.response.data.message })
@@ -56,7 +55,7 @@ function Signup() {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   style={{ width: "300px" }}
-                  value={formik.errors.email && !formik.touched.email}
+                  value={formik.values.email}
                   isInvalid={formik.errors.email && formik.touched.email}
                 />
 
