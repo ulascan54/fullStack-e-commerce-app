@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import Signin from "./pages/Auth/Signin"
 import Signup from "./pages/Auth/Signup"
+import Products from "./pages/Products"
 function App() {
   return (
     <Router>
@@ -10,7 +11,7 @@ function App() {
         <Navbar />
         <div id="content">
           <Routes>
-            <Route path="/" exact element={<Home />} />
+            <Route path="/" exact element={<Products />} />
             <Route path="/signin" exact element={<Signin />} />
             <Route path="/signup" exact element={<Signup />} />
           </Routes>
@@ -18,10 +19,6 @@ function App() {
       </div>
     </Router>
   )
-}
-
-function Home() {
-  return <h1>Home</h1>
 }
 
 export default App
