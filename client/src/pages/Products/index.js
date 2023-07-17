@@ -7,9 +7,9 @@ import { fetchProductList } from "../../api"
 function Products() {
   const { isLoading, error, data } = useQuery("products", fetchProductList)
 
-  if (isLoading) return "Loading..."
+  if (isLoading) return <div>Loading...</div>
 
-  if (error) return "An error has occurred: " + error.message
+  if (error) return <div>An error has occurred: {error.message}</div>
 
   return (
     <div>
