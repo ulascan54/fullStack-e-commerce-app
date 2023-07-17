@@ -4,12 +4,23 @@ import "./index.css"
 import "./reset.css"
 import { ChakraProvider } from "@chakra-ui/react"
 
+import { ReactQueryDevtools } from "react-query/devtools"
+
 import { QueryClient, QueryClientProvider } from "react-query"
 
 import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchInactive: true,
+      staleTime: Infinity,
+    },
+  },
+})
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
@@ -18,6 +29,7 @@ root.render(
       <ChakraProvider>
         <App />
       </ChakraProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>
 )
