@@ -9,3 +9,8 @@ export const fetchProduct = async (id) => {
   const { data } = await axios.get(`${baseUrl}product/${id}`)
   return data
 }
+
+export const fetchRegister = async (input) => {
+  const { data } = await axios.post(`${baseUrl}auth/register`, input)
+  return data
+}

@@ -1,4 +1,3 @@
-import React from "react"
 import {
   Flex,
   Button,
@@ -7,9 +6,16 @@ import {
   FormControl,
   FormLabel,
   Box,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Stack,
+  FormHelperText,
 } from "@chakra-ui/react"
 import validationSchema from "./validations"
 import { useFormik } from "formik"
+import { fetchRegister } from "../../../api"
 
 function Signup() {
   const formik = useFormik({
@@ -20,7 +26,15 @@ function Signup() {
     },
     validationSchema,
     onSubmit: async (values, bag) => {
-      console.log(values)
+      try {
+        const registerResponse = await fetchRegister({
+          email: values.email,
+          password: values.password,
+        })
+        console.log(registerResponse)
+      } catch (error) {
+        bag.setErrors({ general: error.response.data.message })
+      }
     },
   })
 
@@ -39,8 +53,16 @@ function Signup() {
                   name="email"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.email}
+                  style={{ width: "300px" }}
+                  value={formik.errors.email && !formik.touched.email}
+                  isInvalid={formik.errors.email && formik.touched.email}
                 />
+
+                {formik.errors.email && formik.touched.email && (
+                  <FormHelperText color="red">
+                    Error: {formik.errors.email}
+                  </FormHelperText>
+                )}
               </FormControl>
 
               <FormControl>
@@ -50,8 +72,16 @@ function Signup() {
                   type="password"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  style={{ width: "300px" }}
                   value={formik.values.password}
+                  isInvalid={formik.errors.password && formik.touched.password}
                 />
+
+                {formik.errors.password && formik.touched.password && (
+                  <FormHelperText color="red">
+                    Error: {formik.errors.password}
+                  </FormHelperText>
+                )}
               </FormControl>
 
               <FormControl>
@@ -61,8 +91,19 @@ function Signup() {
                   type="password"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  style={{ width: "300px" }}
                   value={formik.values.passwordConfirm}
+                  isInvalid={
+                    formik.errors.passwordConfirm &&
+                    formik.touched.passwordConfirm
+                  }
                 />
+                {formik.errors.passwordConfirm &&
+                  formik.touched.passwordConfirm && (
+                    <FormHelperText color="red">
+                      Error: {formik.errors.passwordConfirm}
+                    </FormHelperText>
+                  )}
               </FormControl>
 
               <Button mt={4} type="submit" w="100%">
@@ -72,6 +113,16 @@ function Signup() {
           </Box>
         </Box>
       </Flex>
+
+      <Stack spacing={3} position="fixed" bottom={0} left={0} p="10px">
+        {formik.errors.general && (
+          <Alert status="error" borderRadius={15} overflow="hidden">
+            <AlertIcon />
+            <AlertTitle>Data base error!</AlertTitle>
+            <AlertDescription>{formik.errors.general}</AlertDescription>
+          </Alert>
+        )}
+      </Stack>
     </div>
   )
 }
