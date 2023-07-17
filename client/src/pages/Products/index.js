@@ -42,7 +42,6 @@ function Products() {
       </Grid>
       <Flex mt="10" justifyContent="center">
         <Button
-          colorScheme="facebook"
           onClick={() => fetchNextPage()}
           isLoading={isFetchingNextPage}
           disabled={!hasNextPage || isFetchingNextPage}
