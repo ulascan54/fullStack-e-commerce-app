@@ -38,3 +38,10 @@ export const fetchMe = async (id) => {
   const { data } = await axios.get(`${baseUrl}/auth/me`)
   return data
 }
+
+export const fetchLogout = async () => {
+  const { data } = await axios.post(`${baseUrl}/auth/logout`, {
+    refresh_token: localStorage.getItem("refresh-token"),
+  })
+  return data
+}
