@@ -34,6 +34,11 @@ export const fetchRegister = async (input) => {
   return data
 }
 
+export const fetchLogin = async (input) => {
+  const { data } = await axios.post(`${baseUrl}/auth/login`, input)
+  return data
+}
+
 export const fetchMe = async (id) => {
   const { data } = await axios.get(`${baseUrl}/auth/me`)
   return data
