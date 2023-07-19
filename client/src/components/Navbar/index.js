@@ -5,10 +5,10 @@ import { Button, Text, Box } from "@chakra-ui/react"
 import { useAuth } from "../../contexts/AuthContext"
 import { useBasket } from "../../contexts/BasketContex"
 import CIcon from "@coreui/icons-react"
-import { cilCart } from "@coreui/icons"
+import { cilUser, cilCart } from "@coreui/icons"
 
 function Navbar() {
-  const { loggedIn } = useAuth()
+  const { loggedIn, user } = useAuth()
   const { items } = useBasket()
 
   return (
@@ -62,6 +62,22 @@ function Navbar() {
                   </Button>
                 </Link>
               </Box>
+            )}
+            {user?.role === "admin" && (
+              <Link to="/admin">
+                <Button colorScheme="blue" p={2} w={100} variant="ghost">
+                  Admin
+                  <CIcon
+                    icon={cilUser}
+                    size="sm"
+                    style={{
+                      "--ci-primary-color": "black",
+                      padding: "6px",
+                      paddingRight: "0",
+                    }}
+                  />
+                </Button>
+              </Link>
             )}
             <Link to="/profile">
               <Button>Profile</Button>

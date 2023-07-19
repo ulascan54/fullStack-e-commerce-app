@@ -36,11 +36,10 @@ function Basket() {
       items: JSON.stringify(itemsIds),
     }
 
-    const response = await postOrder(input)
+    await postOrder(input)
     setAddress("")
     emptyBasket()
     onClose()
-    console.log(response)
   }
   const total = items.reduce((acc, item) => acc + item.price, 0)
   return (
