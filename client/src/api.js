@@ -61,3 +61,8 @@ export const fetchOrders = async () => {
   await data.reverse()
   return data
 }
+
+export const deleteProduct = async (id) => {
+  const { data } = await axios.delete(`${baseUrl}/product/${id}`)
+  return data
+}
