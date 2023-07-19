@@ -66,3 +66,8 @@ export const deleteProduct = async (id) => {
   const { data } = await axios.delete(`${baseUrl}/product/${id}`)
   return data
 }
+
+export const updateProduct = async (input, id) => {
+  const { data } = await axios.put(`${baseUrl}/product/${id}`, input)
+  return data
+}
