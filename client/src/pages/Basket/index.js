@@ -1,13 +1,47 @@
-import React from "react"
+import { useRef, useState } from "react"
 import { useBasket } from "../../contexts/BasketContex"
-import { Alert, Button, Image, Box } from "@chakra-ui/react"
+import {
+  Alert,
+  Button,
+  Image,
+  Box,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  Textarea,
+} from "@chakra-ui/react"
 import { Link } from "react-router-dom"
 import CIcon from "@coreui/icons-react"
 import { cilTrash } from "@coreui/icons"
+import { postOrder } from "../../api"
 
 function Basket() {
-  const { items, removeFromBasket } = useBasket()
+  const [address, setAddress] = useState()
+  const { items, removeFromBasket, emptyBasket } = useBasket()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const initialRef = useRef(null)
+  const finalRef = useRef(null)
 
+  const handleSubmitForm = async () => {
+    const itemsIds = items.map((item) => item._id)
+    const input = {
+      address,
+      items: JSON.stringify(itemsIds),
+    }
+
+    const response = await postOrder(input)
+    setAddress("")
+    emptyBasket()
+    onClose()
+    console.log(response)
+  }
   const total = items.reduce((acc, item) => acc + item.price, 0)
   return (
     <div
@@ -90,8 +124,53 @@ function Basket() {
             ))}
           </ul>
           <Box mt={10} fontSize={22}>
-            Total :{total} TL
+            Total: {total} TL
           </Box>
+
+          <Button colorScheme="green" onClick={onOpen}>
+            Order
+          </Button>
+
+          <Modal
+            initialFocusRef={initialRef}
+            finalFocusRef={finalRef}
+            isOpen={isOpen}
+            onClose={() => {
+              setAddress("")
+              onClose()
+            }}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Order</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody pb={6}>
+                <FormControl>
+                  <FormLabel>Adress</FormLabel>
+                  <Textarea
+                    ref={initialRef}
+                    placeholder="Adress"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </FormControl>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={handleSubmitForm}>
+                  Save
+                </Button>
+                <Button
+                  onClick={() => {
+                    setAddress("")
+                    onClose()
+                  }}
+                >
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </Box>
       )}
     </div>
