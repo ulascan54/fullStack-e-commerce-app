@@ -71,3 +71,8 @@ export const updateProduct = async (input, id) => {
   const { data } = await axios.put(`${baseUrl}/product/${id}`, input)
   return data
 }
+
+export const postProduct = async (input) => {
+  const { data } = await axios.post(`${baseUrl}/product/`, input)
+  return data
+}

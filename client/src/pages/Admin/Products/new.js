@@ -1,7 +1,6 @@
 import React from "react"
-import { useQuery } from "react-query"
-import { useParams } from "react-router-dom"
-import { fetchProduct, updateProduct } from "../../../api"
+import { useMutation, useQueryClient } from "react-query"
+import { postProduct } from "../../../api"
 import {
   Box,
   Text,
@@ -19,49 +18,58 @@ import { message } from "antd"
 
 import validationSchema from "./validations"
 
-function ProductDetail() {
-  const { product_id } = useParams()
-  const { isLoading, isError, data, error } = useQuery(
-    ["admin:product", product_id],
-    () => fetchProduct(product_id)
-  )
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-  if (isError) {
-    return <div>Error :{error.message}</div>
-  }
+function NewProduct() {
+  const queryClient = useQueryClient()
+  const newProductMutation = useMutation(postProduct, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin:products"] })
+    },
+  })
   const handleSubmit = async (values, bag) => {
-    message.loading({ content: "Loading...", key: "product:update" })
     try {
-      await updateProduct(values, product_id)
-      message.success({
-        content: "The product updated successfully",
-        key: "product:update",
+      message.loading({
+        content: "Loading new product ....",
+        key: "product:new",
         duration: 2,
+      })
+
+      const newValues = {
+        ...values,
+        photos: JSON.stringify(values.photos),
+      }
+
+      console.log(newValues)
+
+      newProductMutation.mutate(newValues, {
+        onSuccess: () => {
+          message.success({
+            content: "The product added successfully",
+            key: "product:new",
+            duration: 2,
+          })
+        },
       })
     } catch (error) {
+      console.log(error)
       message.error({
-        content: "The product updated failed",
-        key: "product:update",
+        content: "The product added failed",
+        key: "product:new",
         duration: 2,
       })
-      console.log(error)
     }
   }
 
   return (
     <div>
       <Text fontSize="2xl" pl={5}>
-        Product Detail
+        Add New Product
       </Text>
       <Formik
         initialValues={{
-          title: data.title,
-          description: data.description,
-          price: data.price,
-          photos: data.photos,
+          title: "t",
+          description: "t",
+          price: "t",
+          photos: [],
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -183,7 +191,7 @@ function ProductDetail() {
                     w="full"
                     isLoading={isSubmitting}
                   >
-                    Update
+                    Save
                   </Button>
                 </form>
               </Box>
@@ -195,4 +203,4 @@ function ProductDetail() {
   )
 }
 
-export default ProductDetail
+export default NewProduct

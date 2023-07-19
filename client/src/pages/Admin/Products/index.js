@@ -1,12 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import { deleteProduct, fetchProductList } from "../../../api"
 import { useMemo } from "react"
-import { Text } from "@chakra-ui/react"
+import { Flex, Text } from "@chakra-ui/react"
 
-import { Link } from "react-router-dom"
+import { Link, useResolvedPath } from "react-router-dom"
 
 import { Table, Button, Popconfirm } from "antd"
 function Products() {
+  const url = useResolvedPath("").pathname
+
   const queryClient = useQueryClient()
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["admin:products"],
@@ -71,9 +73,19 @@ function Products() {
 
   return (
     <div>
-      <Text fontSize="2xl" pl={5}>
-        Products
-      </Text>
+      <Flex
+        justifyContent="space-between"
+        alignItems="center"
+        pr="20px"
+        pb="20px"
+      >
+        <Text fontSize="2xl" pl={5}>
+          Products
+        </Text>
+        <Link to={"new"}>
+          <Button type="dashed">New</Button>
+        </Link>
+      </Flex>
       <Table dataSource={data} columns={columns} rowKey="_id"></Table>
     </div>
   )

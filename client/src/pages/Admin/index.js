@@ -6,6 +6,7 @@ import Home from "./Home"
 import Orders from "./Orders"
 import Products from "./Products"
 import ProductDetail from "./ProductDetail"
+import NewProduct from "./Products/new"
 function Admin() {
   const url = useResolvedPath("").pathname
 
@@ -31,6 +32,7 @@ function Admin() {
           <Route path={`/orders`} element={<Orders />} />
           <Route path={`/products`} element={<Products />} />
           <Route path={`/products/:product_id`} element={<ProductDetail />} />
+          <Route path={`/products/new`} element={<NewProduct />} />
         </Routes>
       </Box>
     </div>
