@@ -1,9 +1,11 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import styles from "./styles.module.css"
-import { Button } from "@chakra-ui/react"
+import { Button, Text, Box } from "@chakra-ui/react"
 import { useAuth } from "../../contexts/AuthContext"
 import { useBasket } from "../../contexts/BasketContex"
+import CIcon from "@coreui/icons-react"
+import { cilCart } from "@coreui/icons"
 
 function Navbar() {
   const { loggedIn } = useAuth()
@@ -34,16 +36,37 @@ function Navbar() {
         )}
 
         {loggedIn && (
-          <>
+          <Box display="flex">
             {items.length > 0 && (
-              <Link to="/basket">
-                <Button colorScheme="pink">Basket ({items.length}) </Button>
-              </Link>
+              <Box
+                display="flex"
+                pr={2}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Text
+                  fontSize="22px"
+                  fontWeight="semibold"
+                  pr="2"
+                  color="GrayText"
+                >
+                  {items.length}
+                </Text>
+                <Link to="/basket">
+                  <Button colorScheme="pink" p={2}>
+                    <CIcon
+                      icon={cilCart}
+                      size="lg"
+                      style={{ "--ci-primary-color": "white" }}
+                    />
+                  </Button>
+                </Link>
+              </Box>
             )}
             <Link to="/profile">
               <Button>Profile</Button>
             </Link>
-          </>
+          </Box>
         )}
       </div>
     </nav>
